@@ -12,18 +12,28 @@ export class HomePage {
   constructor(private stripe: Stripe) {
     console.log('caca home');
     
-    this.stripe.setPublishableKey('pk_test_ZOS306v6VUm4b4FPpfsDcuvE00Gv7W5YXp');
     
+  }
+  
+  botonEnviar() {
+
+    this.stripe.setPublishableKey('pk_test_ZOS306v6VUm4b4FPpfsDcuvE00Gv7W5YXp');
+
+    console.log('[botonEnviar] Stripe pago');
+
     let card = {
     number: '4242424242424242',
     expMonth: 12,
     expYear: 2020,
     cvc: '220'
     }
-  
+
     this.stripe.createCardToken(card)
-      .then(token => console.log(token.id))
-      .catch(error => console.error(error));
+
+      .then(token => console.log('token id:', token.id, 'token: ', token))
+
+      .catch(error => console.error('error: ', error));
+    
   }
   
 
