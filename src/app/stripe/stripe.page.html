@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>stripe</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid text-center>
+    <ion-row>
+      <ion-col>
+        Usa el botón de pago con Use this Pay button with the attached logic in your app's payment page.
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card class="welcome-card">
+    <ion-img src="/assets/img/stripe.png"></ion-img>
+    <ion-card-header>
+      <ion-card-subtitle>Comenzar Pruebas</ion-card-subtitle>
+      <ion-card-title>Ejemplo Stripe</ion-card-title>
+      <ion-row>
+        <ion-col>
+          Total a pagar
+        </ion-col>
+        <ion-col>
+          {{currencyIcon}}{{paymentAmount}}
+        </ion-col>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button expand="full" color="success" (click)="payWithStripe()">Paga con Stripe</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
