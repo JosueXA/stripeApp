@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Stripe } from '@ionic-native/stripe/ngx';
-import { HttpClient } from '@angular/common/http';
+import { StripeServiceService } from '../services/stripe-service.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-stripe',
@@ -17,13 +18,33 @@ export class StripePage implements OnInit {
 
   constructor(
     private stripe: Stripe,
-    private http: HttpClient    
+    private stripeSrv: StripeServiceService,
+    private toastCtrl: ToastController
   ) {
     console.log('[constructor]');
   }
 
   ngOnInit() {
   }
+
+  async successToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Se ha realizo el pago de forma exitosa',
+      duration: 2000,
+      color: 'success'
+    });
+    toast.present();
+  }
+
+  async errorToast(message) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 2000,
+      color: 'danger'
+    });
+    toast.present();
+  }
+
 
   payWithStripe() {
     console.log('[payWithStripe]');
@@ -39,12 +60,13 @@ export class StripePage implements OnInit {
     this.stripe.createCardToken(card)
 
       .then(token => {
-        console.log('[makePayment] token: ', token);
-        console.log('[makePayment] token id:', token.id);
+        console.log('[payWithStripe][createCardToken] token:' , token);
+        console.log('[payWithStripe][createCardToken] token id:', token.id);
         this.makePayment(token);
       })
 
       .catch(error => {
+        this.errorToast(error);; 
         console.error('error: ', error);
       });
     
@@ -52,17 +74,8 @@ export class StripePage implements OnInit {
 
   makePayment(token) {
     console.log('[makePayment]');
-    this.http
-      .post('localhost:8000/api/store', {
-        amount: 100,
-        currency: "MXN",
-        token: token,
-        source: token.id,
-      })
-      .subscribe(data => {
-        console.log('[makePayment] status');
-        console.log('data: ', data);
-      });
+    console.log('[makePayment] token: ', token);
+    this.stripeSrv.realizaPago(token);
   }
 
 }
