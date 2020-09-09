@@ -9,8 +9,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class StripePage implements OnInit {
 
-  paymentAmount: string = '3.33';
-  currency: string = 'USD';
+  paymentAmount: string = '100';
+  currency: string = 'MXN';
   currencyIcon: string = '$';
   stripeKey = 'pk_test_ZOS306v6VUm4b4FPpfsDcuvE00Gv7W5YXp';
   cardDetails: any = {};
@@ -27,7 +27,6 @@ export class StripePage implements OnInit {
 
   payWithStripe() {
     console.log('[payWithStripe]');
-
     this.stripe.setPublishableKey(this.stripeKey);
 
     let card = {
@@ -40,8 +39,9 @@ export class StripePage implements OnInit {
     this.stripe.createCardToken(card)
 
       .then(token => {
-        console.log('token id:', token.id);
-        this.makePayment(token.id);
+        console.log('[makePayment] token: ', token);
+        console.log('[makePayment] token id:', token.id);
+        this.makePayment(token);
       })
 
       .catch(error => {
@@ -53,13 +53,14 @@ export class StripePage implements OnInit {
   makePayment(token) {
     console.log('[makePayment]');
     this.http
-      .post('http://localhost:5000/stripeapp-d9e5f/us-central1/payWithStripe', {
+      .post('localhost:8000/api/store', {
         amount: 100,
-        currency: "usd",
-        token: token.id,
-        source: token,
+        currency: "MXN",
+        token: token,
+        source: token.id,
       })
       .subscribe(data => {
+        console.log('[makePayment] status');
         console.log('data: ', data);
       });
   }
