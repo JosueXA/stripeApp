@@ -10,11 +10,15 @@ import { ToastController } from '@ionic/angular';
 })
 export class StripePage implements OnInit {
 
-  paymentAmount: string = '100';
+  paymentAmount: string = '500';
   currency: string = 'MXN';
   currencyIcon: string = '$';
   stripeKey = 'pk_test_ZOS306v6VUm4b4FPpfsDcuvE00Gv7W5YXp';
   cardDetails: any = {};
+  cardNumber: string;
+  cardMonth: any;
+  cardYear: any;
+  cardCvc: string;
 
   constructor(
     private stripe: Stripe,
@@ -25,15 +29,6 @@ export class StripePage implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  async successToast() {
-    const toast = await this.toastCtrl.create({
-      message: 'Se ha realizo el pago de forma exitosa',
-      duration: 2000,
-      color: 'success'
-    });
-    toast.present();
   }
 
   async errorToast(message) {
@@ -49,24 +44,30 @@ export class StripePage implements OnInit {
   payWithStripe() {
     console.log('[payWithStripe]');
     this.stripe.setPublishableKey(this.stripeKey);
-
+    /*
     let card = {
       number: '4242424242424242',
       expMonth: 12,
       expYear: 2020,
       cvc: '220'
     };
-
+    */
+   let card = {
+     number: this.cardNumber,
+     expMonth: this.cardMonth,
+     expYear: this.cardYear,
+     cvc: this.cardCvc
+   }
+    
     this.stripe.createCardToken(card)
 
       .then(token => {
         console.log('[payWithStripe][createCardToken] token:' , token);
-        console.log('[payWithStripe][createCardToken] token id:', token.id);
         this.makePayment(token);
       })
 
       .catch(error => {
-        this.errorToast(error);; 
+        this.errorToast(error.message);
         console.error('error: ', error);
       });
     

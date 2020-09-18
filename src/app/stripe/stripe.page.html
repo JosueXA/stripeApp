@@ -29,6 +29,10 @@
       </ion-row>
     </ion-card-header>
     <ion-card-content>
+      <ion-input type="number" placeholder="Número de tarjeta" value={{cardNumber}}></ion-input>
+      <ion-input type="number" placeholder="Mes" value={{cardMonth}}></ion-input>
+      <ion-input type="number" placeholder="Año" value={{cardYear}}></ion-input>
+      <ion-input type="number" placeholder="CVV" value={{cardCvc}}></ion-input>
       <ion-button expand="full" color="success" (click)="payWithStripe()">Paga con Stripe</ion-button>
     </ion-card-content>
   </ion-card>
